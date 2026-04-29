@@ -3,18 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বাকি হিসাব ৩.০ - লগইন</title>
+    <title>বাকি হিসাব ৩.০ - স্মার্ট ড্যাশবোর্ড</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .login-box h2 { color: #800000; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #800000; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button:hover { background-color: #a00000; }
-        #content-area { display: none; width: 100%; max-width: 1000px; margin: 20px; text-align: center; }
-        .iframe-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; position: relative; }
-        .section-title { background: #800000; color: white; padding: 10px; margin: 0; font-size: 18px; }
-        iframe { border: none; width: 100%; height: 500px; }
+        :root {
+            --primary: #800000;
+            --secondary: #f4f4f9;
+            --white: #ffffff;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: var(--secondary); 
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh;
+        }
+
+        /* লগইন বক্স */
+        .login-box { 
+            background: var(--white); padding: 40px; border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; 
+            max-width: 360px; text-align: center; 
+        }
+        .login-box h2 { color: var(--primary); margin-bottom: 25px; font-size: 26px; }
+        
+        input { 
+            width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; 
+            border-radius: 8px; box-sizing: border-box; font-size: 16px;
+        }
+
+        .btn-main { 
+            width: 100%; padding: 14px; background-color: var(--primary); 
+            color: white; border: none; border-radius: 8px; cursor: pointer; 
+            font-size: 16px; font-weight: bold; transition: 0.3s;
+        }
+        .btn-main:hover { background-color: #a00000; transform: translateY(-2px); }
+
+        /* ড্যাশবোর্ড কন্টেন্ট */
+        #content-area { display: none; width: 100%; max-width: 1100px; margin: 20px auto; padding: 10px; }
+
+        /* ট্যাব স্টাইল */
+        .tab-wrapper { display: flex; gap: 5px; margin-bottom: 15px; background: #ddd; padding: 5px; border-radius: 10px; }
+        .tab-btn { 
+            flex: 1; padding: 12px; border: none; cursor: pointer; 
+            background: none; font-weight: bold; border-radius: 8px; transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--primary); color: white; }
+
+        .iframe-container { 
+            background: var(--white); border-radius: 12px; overflow: hidden; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: none; 
+        }
+        .iframe-container.active { display: block; }
+
+        iframe { border: none; width: 100%; height: 600px; display: block; }
+
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        @media (max-width: 600px) {
+            iframe { height: 500px; }
+            .header-text { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -22,41 +71,86 @@
     <div id="login-form" class="login-box">
         <h2>বাকি হিসাব ৩.০</h2>
         <input type="text" id="userid" placeholder="ইউজার আইডি">
-        <input type="password" id="pass" placeholder="পাসওয়ার্ড">
-        <button onclick="checkLogin()">লগইন করুন</button>
-        <p id="msg" style="color: red; display: none; margin-top: 10px;">ভুল আইডি বা পাসওয়ার্ড!</p>
+        <input type="password" id="pass" placeholder="পাসওয়ার্ড">
+        <button class="btn-main" onclick="checkLogin()">লগইন করুন</button>
+        <p id="msg" style="color: red; display: none; margin-top: 15px;">ভুল আইডি বা পাসওয়ার্ড!</p>
     </div>
 
     <div id="content-area">
-        <h2 style="color: #800000;">ড্যাশবোর্ড - বাকি হিসাব ৩.০</h2>
-        
-        <div class="iframe-container">
-            <p class="section-title">তথ্য এন্ট্রি ও রিপোর্ট</p>
+        <div class="top-nav">
+            <h2 class="header-text" style="color: var(--primary); margin: 0;">ড্যাশবোর্ড ৩.০</h2>
+            <button onclick="logout()" style="padding: 8px 15px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">লগ আউট</button>
+        </div>
+
+        <div class="tab-wrapper">
+            <button class="tab-btn active" onclick="openTab(event, 'entry-tab')">তথ্য এন্ট্রি</button>
+            <button class="tab-btn" onclick="openTab(event, 'report-tab')">লাইভ রিপোর্ট</button>
+        </div>
+
+        <div id="entry-tab" class="iframe-container active">
             <iframe src="https://script.google.com/macros/s/AKfycbyz90ERoZ4ThdAzUZuPq8BrrHH8eeLxmggfSrXlPJdnhACwNEOa5jlE8eFus0YYWPuO/exec"></iframe>
         </div>
 
-        <div class="iframe-container">
-            <p class="section-title">লাইভ হিসাব তালিকা</p>
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTGAqWU1mMKBzWoPMrF6HYgeOcafMWRFItRQH53QxwTKKiDTrnpBST0WwvQnJShzSpNTCY6Bl5m6FmY/pubhtml?chrome=false&amp;widget=true&amp;headers=false"></iframe>
+        <div id="report-tab" class="iframe-container">
+            <div style="background: #f1f1f1; padding: 5px; text-align: right;">
+                <button onclick="refreshReport()" style="font-size: 12px; cursor: pointer;">রিফ্রেশ রিপোর্ট ↻</button>
+            </div>
+            <iframe id="reportFrame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTGAqWU1mMKBzWoPMrF6HYgeOcafMWRFItRQH53QxwTKKiDTrnpBST0WwvQnJShzSpNTCY6Bl5m6FmY/pubhtml?chrome=false&amp;widget=true&amp;headers=false"></iframe>
         </div>
-        
-        <button onclick="location.reload()" style="max-width: 150px; margin-top: 20px;">লগ আউট</button>
     </div>
 
     <script>
+        // সেশন চেক
+        if (sessionStorage.getItem("logged") === "true") {
+            showDashboard();
+        }
+
         function checkLogin() {
             var id = document.getElementById('userid').value;
             var p = document.getElementById('pass').value;
 
-            // আপনার দেওয়া আইডি ও পাসওয়ার্ড
             if (id === "admin" && p === "66850") {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('content-area').style.display = 'block';
-                document.body.style.display = 'block'; // কন্টেন্ট বড় হলে স্ক্রল করার জন্য
+                sessionStorage.setItem("logged", "true");
+                showDashboard();
             } else {
                 document.getElementById('msg').style.display = 'block';
             }
         }
+
+        function showDashboard() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('content-area').style.display = 'block';
+            document.body.style.alignItems = 'flex-start';
+        }
+
+        function openTab(evt, tabName) {
+            var i, containers, tabs;
+            containers = document.getElementsByClassName("iframe-container");
+            for (i = 0; i < containers.length; i++) {
+                containers[i].classList.remove("active");
+            }
+            tabs = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function refreshReport() {
+            var iframe = document.getElementById('reportFrame');
+            iframe.src = iframe.src;
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        // Enter Key সাপোর্ট
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
     </script>
 
 </body>
