@@ -5,22 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বাকি হিসাব ৩.০ - স্মার্ট ড্যাশবোর্ড</title>
     <style>
-        :root { --primary: #800000; --secondary: #f4f4f9; --white: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--secondary); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .login-box { background: var(--white); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 360px; text-align: center; }
+        :root {
+            --primary: #800000;
+            --secondary: #f4f4f9;
+            --white: #ffffff;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: var(--secondary); 
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh;
+        }
+
+        /* লগইন বক্স */
+        .login-box { 
+            background: var(--white); padding: 40px; border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; 
+            max-width: 360px; text-align: center; 
+        }
         .login-box h2 { color: var(--primary); margin-bottom: 25px; font-size: 26px; }
-        input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        .btn-main { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        
+        input { 
+            width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; 
+            border-radius: 8px; box-sizing: border-box; font-size: 16px;
+        }
+
+        .btn-main { 
+            width: 100%; padding: 14px; background-color: var(--primary); 
+            color: white; border: none; border-radius: 8px; cursor: pointer; 
+            font-size: 16px; font-weight: bold; transition: 0.3s;
+        }
         .btn-main:hover { background-color: #a00000; transform: translateY(-2px); }
+
+        /* ড্যাশবোর্ড কন্টেন্ট */
         #content-area { display: none; width: 100%; max-width: 1100px; margin: 20px auto; padding: 10px; }
+
+        /* ট্যাব স্টাইল */
         .tab-wrapper { display: flex; gap: 5px; margin-bottom: 15px; background: #ddd; padding: 5px; border-radius: 10px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; cursor: pointer; background: none; font-weight: bold; border-radius: 8px; transition: 0.3s; }
+        .tab-btn { 
+            flex: 1; padding: 12px; border: none; cursor: pointer; 
+            background: none; font-weight: bold; border-radius: 8px; transition: 0.3s;
+        }
         .tab-btn.active { background: var(--primary); color: white; }
-        .iframe-container { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: none; }
+
+        .iframe-container { 
+            background: var(--white); border-radius: 12px; overflow: hidden; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); display: none; 
+        }
         .iframe-container.active { display: block; }
+
         iframe { border: none; width: 100%; height: 600px; display: block; }
+
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        @media (max-width: 600px) { iframe { height: 500px; } .header-text { font-size: 18px; } }
+        
+        @media (max-width: 600px) {
+            iframe { height: 500px; }
+            .header-text { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -52,30 +95,25 @@
             <div style="background: #f1f1f1; padding: 5px; text-align: right;">
                 <button onclick="refreshReport()" style="font-size: 12px; cursor: pointer;">রিফ্রেশ রিপোর্ট ↻</button>
             </div>
-            <iframe id="reportFrame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTGAqWU1mMKBzWoPMrF6HYgeOcafMWRFItRQH53QxwTKKiDTrnpBST0WwvQnJShzSpNTCY6Bl5m6FmY/pubhtml?chrome=false&amp;widget=true&amp;headers=false"></iframe>
+            <iframe id="reportFrame" src="https://docs.google.com/spreadsheets/d/1IXz8zmpO_9-kK9C0B9EBTHHobhgCEbaA04PdbbsSSis/edit?gid=1578356065#gid=1578356065"></iframe>
         </div>
     </div>
 
     <script>
-        // আপনার পাসওয়ার্ড '66850' এর এনকোডেড রূপ (সরাসরি দেখা যাবে না)
-        var _0x5f2e = "NjY4NTA="; 
-        var _0x2b1c = "YWRtaW4=";
-
+        // সেশন চেক
         if (sessionStorage.getItem("logged") === "true") {
             showDashboard();
         }
 
         function checkLogin() {
-            var u = document.getElementById('userid').value;
+            var id = document.getElementById('userid').value;
             var p = document.getElementById('pass').value;
 
-            // এনকোড করে মিলিয়ে দেখা হচ্ছে
-            if (btoa(u) === _0x2b1c && btoa(p) === _0x5f2e) {
+            if (id === "admin" && p === "66850") {
                 sessionStorage.setItem("logged", "true");
                 showDashboard();
             } else {
                 document.getElementById('msg').style.display = 'block';
-                setTimeout(function(){ document.getElementById('msg').style.display = 'none'; }, 2000);
             }
         }
 
@@ -88,15 +126,20 @@
         function openTab(evt, tabName) {
             var i, containers, tabs;
             containers = document.getElementsByClassName("iframe-container");
-            for (i = 0; i < containers.length; i++) { containers[i].classList.remove("active"); }
+            for (i = 0; i < containers.length; i++) {
+                containers[i].classList.remove("active");
+            }
             tabs = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
 
         function refreshReport() {
-            document.getElementById('reportFrame').src = document.getElementById('reportFrame').src;
+            var iframe = document.getElementById('reportFrame');
+            iframe.src = iframe.src;
         }
 
         function logout() {
@@ -104,9 +147,11 @@
             location.reload();
         }
 
+        // Enter Key সাপোর্ট
         document.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') checkLogin();
         });
     </script>
+
 </body>
 </html>
