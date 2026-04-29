@@ -40,7 +40,25 @@
         .btn-main:hover { background-color: #a00000; transform: translateY(-2px); }
 
         /* ড্যাশবোর্ড কন্টেন্ট */
-        #content-area { display: none; width: 100%; max-width: 1100px; margin: 20px auto; padding: 10px; }
+        #content-area { display: none; width: 100%; max-width: 1100px; margin: 20px auto; padding: 10px; position: relative; }
+
+        /* লাইভ শীট বাটন */
+        .live-sheet-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: none;
+        }
+        .live-sheet-float:hover { background-color: #1b5e20; }
 
         /* ট্যাব স্টাইল */
         .tab-wrapper { display: flex; gap: 5px; margin-bottom: 15px; background: #ddd; padding: 5px; border-radius: 10px; }
@@ -63,6 +81,7 @@
         @media (max-width: 600px) {
             iframe { height: 500px; }
             .header-text { font-size: 18px; }
+            .live-sheet-float { bottom: 10px; right: 10px; font-size: 12px; padding: 8px 12px; }
         }
     </style>
 </head>
@@ -76,9 +95,12 @@
         <p id="msg" style="color: red; display: none; margin-top: 15px;">ভুল আইডি বা পাসওয়ার্ড!</p>
     </div>
 
+    <a href="https://docs.google.com/spreadsheets/d/1IXz8zmpO_9-kK9C0B9EBTHHobhgCEbaA04PdbbsSSis/edit?gid=78457984#gid=78457984" 
+       target="_blank" id="live-sheet-btn" class="live-sheet-float">লাইভ শীট 🔗</a>
+
     <div id="content-area">
         <div class="top-nav">
-            <h2 class="header-text" style="color: var(--primary); margin: 0;">ড্যাশবোর্ড ৩.০</h2>
+            <h2 class="header-text" style="color: var(--primary); margin: 0;">ড্যাশবোর্ড ৩.০- Smart Baki Hisab web 3.0</h2>
             <button onclick="logout()" style="padding: 8px 15px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">লগ আউট</button>
         </div>
 
@@ -95,7 +117,7 @@
             <div style="background: #f1f1f1; padding: 5px; text-align: right;">
                 <button onclick="refreshReport()" style="font-size: 12px; cursor: pointer;">রিফ্রেশ রিপোর্ট ↻</button>
             </div>
-            <iframe id="reportFrame" src="https://docs.google.com/spreadsheets/d/1IXz8zmpO_9-kK9C0B9EBTHHobhgCEbaA04PdbbsSSis/edit?gid=1578356065#gid=1578356065"></iframe>
+            <iframe id="reportFrame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQvoolOL3uw-Eb8mnOMc9FnBBVDm5smLSIT9S377ozneKIt1371mtIAHdC-2I-MTpo1WwPTpfNx2NRS/pubhtml?chrome=false&amp;widget=true&amp;headers=false"></iframe>
         </div>
     </div>
 
@@ -120,6 +142,7 @@
         function showDashboard() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('content-area').style.display = 'block';
+            document.getElementById('live-sheet-btn').style.display = 'block'; // বাটন দেখাবে
             document.body.style.alignItems = 'flex-start';
         }
 
